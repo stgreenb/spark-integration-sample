@@ -216,7 +216,7 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         }
         */
         // Uncomment to send feedback via static HTML code 
-        if("teamID" in json) {
+        if(json.hasOwnProperty('teamId')) {
             res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>The room " + json.title + " is under one of your teams!</p>");
         } else
         res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>The room  " + json.title + " is not under your team!</p>");
