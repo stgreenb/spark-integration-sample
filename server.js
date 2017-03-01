@@ -186,14 +186,14 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
     request(options, function (error, response, body) {
         if (error) {
             debug("could not reach Cisco Spark to retreive Person's details, error: " + error);
-            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>" + error));
+            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>" + error);
             return;
         }
 
         // Check the call is successful
         if (response.statusCode != 200) {
             debug("could not retreive your details, /people/me returned: " + response.statusCode);
-            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>"+ response.statusCode);
+            res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>" + response.statusCode);
             return;
         }
 
