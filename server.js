@@ -225,6 +225,7 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         // var compiled = ejs.compile(str)({ "rooms": json.items });
         // res.send(compiled);
     });
+    res.send('<P>This works right?</p>');
 }
 
 
