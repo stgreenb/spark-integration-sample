@@ -208,12 +208,13 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         //      "created": "2016-02-04T15:46:20.321Z"
         //    }
         var json = JSON.parse(body);
+        /*
         if ((!json) || (!json.displayName)) {
             debug("could not parse Person details: bad json payload or could not find a displayName.");
             res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>");
             return;
         }
-
+        */
         // Uncomment to send feedback via static HTML code 
         //res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>So happy to meet, " + json.displayName + " !</p>");
         // OR leverage an EJS template
