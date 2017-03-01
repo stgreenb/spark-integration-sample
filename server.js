@@ -217,9 +217,9 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         */
         // Uncomment to send feedback via static HTML code 
         if(json.hasOwnProperty('teamId')) {
-            res.send("<h1>APO Team verifcation Cisco Spark</h1><p>The room " + json.title + " <B>is</b> under one of your teams! Please contact Steve Greenberg. </p>");
+            res.send("<h1>APO Team verifcation</h1><p>The room " + json.title + " <b>IS</b> under one of your teams! Please contact Steve Greenberg. </p>");
         } else
-        res.send("<h1>APO Team verifcation Cisco Spark</h1><p>The room  " + json.title + " </b>is not</B> under your team!</p>");
+        res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
         // OR leverage an EJS template
         // var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
         // var compiled = ejs.compile(str)({ "rooms": json.items });
