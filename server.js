@@ -176,7 +176,7 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
     // Retreive user name: GET https://api.ciscospark.com/v1/people/me
     var options = {
         method: 'GET',
-        url: 'https://api.ciscospark.com/v1/rooms/Y2lzY29zcGFyazovL3VzL1JPT00vODIzNjY4NDAtZjdhZi0xMWU2LWE5NTgtYWYzZWVkMzg2MzJi',
+        url: 'https://api.ciscospark.com/v1/rooms/Y2lzY29zcGFyazovL3VzL1JPT00vNGRkZTJmYjAtNzA1Ny0xMWU0LThhZGYtNTkzNDBiNjQwYzA5',
         headers:
         {
             "authorization": "Bearer " + access_token
@@ -217,9 +217,9 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         */
         // Uncomment to send feedback via static HTML code 
         if(json.hasOwnProperty('teamId')) {
-            res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>The room " + json.title + " is under one of your teams!</p>");
+            res.send("<h1>APO Team verifcation Cisco Spark</h1><p>The room " + json.title + " <B>is</b> under one of your teams! Please contact Steve Greenberg. </p>");
         } else
-        res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>The room  " + json.title + " is not under your team!</p>");
+        res.send("<h1>APO Team verifcation Cisco Spark</h1><p>The room  " + json.title + " </b>is not</B> under your team!</p>");
         // OR leverage an EJS template
         // var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
         // var compiled = ejs.compile(str)({ "rooms": json.items });
