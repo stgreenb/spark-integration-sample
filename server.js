@@ -176,7 +176,7 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
     // Retreive user name: GET https://api.ciscospark.com/v1/people/me
     var options = {
         method: 'GET',
-        url: 'https://api.ciscospark.com/v1/rooms',
+        url: 'https://api.ciscospark.com/v1/rooms/Y2lzY29zcGFyazovL3VzL1JPT00vNGRkZTJmYjAtNzA1Ny0xMWU0LThhZGYtNTkzNDBiNjQwYzA5',
         headers:
         {
             "authorization": "Bearer " + access_token
@@ -216,11 +216,11 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         }
         */
         // Uncomment to send feedback via static HTML code 
-        //res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>So happy to meet, " + json.displayName + " !</p>");
+        res.send("<h1>OAuth Integration example for Cisco Spark (static HTML)</h1><p>The rooom name is " + json.title + " !</p>");
         // OR leverage an EJS template
-        var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
-        var compiled = ejs.compile(str)({ "rooms": json.items });
-        res.send(compiled);
+        // var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
+        // var compiled = ejs.compile(str)({ "rooms": json.items });
+        // res.send(compiled);
     });
 }
 
