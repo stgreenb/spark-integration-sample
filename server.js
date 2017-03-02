@@ -183,6 +183,24 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         }
     };
 
+    var teamFound = { method: 'POST',
+      url: 'https://api.ciscospark.com/v1/messages',
+     headers: 
+       { "content-type": "application/json",
+         "authorization": "Bearer " + access_token},
+      body: { toPersonEmail: 'stgreenb@cisco.com', text: 'I have APO collab under a team.' },
+      json: true };
+
+    var teamNotFound = { method: 'POST',
+  url: 'https://api.ciscospark.com/v1/messages',
+  headers: 
+   { "content-type": "application/json",
+     "authorization": "Bearer " + access_token},
+  body: { toPersonEmail: 'stgreenb@cisco.com', text: 'I do not have APO collab under a team.' },
+  json: true };
+    
+
+
     request(options, function (error, response, body) {
         if (error) {
             debug("could not reach Cisco Spark to retreive Person's details, error: " + error);
@@ -218,14 +236,24 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         // Uncomment to send feedback via static HTML code 
         if(json.hasOwnProperty('teamId')) {
             res.send("<h1>APO Team verifcation</h1><p>The room " + json.title + " <b>IS</b> under one of your teams! Please contact Steve Greenberg. </p>");
-        } else
+            request(teamFound, function (error, response, body) {
+            if (error) throw new Error(error);
+             console.log(body);
+            });
+        } else {
         res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
         // OR leverage an EJS template
         // var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
         // var compiled = ejs.compile(str)({ "rooms": json.items });
         // res.send(compiled);
-        res.send('<P>This works right?</p>');
-    });
+        request(teamNotFound, function (error, response, body) {
+            if (error) throw new Error(error);
+
+             console.log(body);
+            });
+        };
+        
+        });
     
 }
 
