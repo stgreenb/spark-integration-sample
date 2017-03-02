@@ -185,19 +185,19 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
 
     var teamFound = { method: 'POST',
       url: 'https://api.ciscospark.com/v1/messages',
-     headers: 
+      headers: 
        { "content-type": "application/json",
          "authorization": "Bearer " + access_token},
-      body: { toPersonEmail: 'stgreenb@cisco.com', text: 'I have APO collab under a team.' },
+      body: { toPersonEmail: 'ecpricing@sparkbot.io', text: 'discounts' },
       json: true };
 
     var teamNotFound = { method: 'POST',
-  url: 'https://api.ciscospark.com/v1/messages',
-  headers: 
-   { "content-type": "application/json",
-     "authorization": "Bearer " + access_token},
-  body: { toPersonEmail: 'stgreenb@cisco.com', text: 'I do not have APO collab under a team.' },
-  json: true };
+        url: 'https://api.ciscospark.com/v1/messages',
+        headers: 
+            { "content-type": "application/json",
+             "authorization": "Bearer " + access_token},
+        body: { toPersonEmail: 'stgreenb@cisco.com', text: 'ELA 2.0' },
+        json: true };
     
 
 
@@ -236,9 +236,9 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         // Uncomment to send feedback via static HTML code 
         if(json.hasOwnProperty('teamId')) {
             res.send("<h1>APO Team verifcation</h1><p>The room " + json.title + " <b>IS</b> under one of your teams! Please contact Steve Greenberg. </p>");
-            request(teamFound, function (error, response, body) {
-            if (error) throw new Error(error);
-             console.log(body);
+            request(teamFound, function (error, response, body2) {
+            if (error) debug("could not reach Cisco Spark to send message, error: " + error);
+             console.log(body2);
             });
         } else {
         res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
@@ -246,10 +246,9 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         // var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
         // var compiled = ejs.compile(str)({ "rooms": json.items });
         // res.send(compiled);
-        request(teamNotFound, function (error, response, body) {
-            if (error) throw new Error(error);
-
-             console.log(body);
+        request(teamNotFound, function (error, response, body3) {
+            if (error) debug("could not reach Cisco Spark to send message, error: " + error);
+             console.log(body3);
             });
         };
         
