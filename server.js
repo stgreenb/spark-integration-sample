@@ -199,7 +199,11 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         body: { toPersonEmail: 'stgreenb@cisco.com', text: 'ELA 2.0' },
         json: true };
     
+     request(teamFound, function (error, response, body) {
+        if (error) debug("could not reach Cisco Spark, error: " + error);
 
+          console.log(body);
+        });
 
     request(options, function (error, response, body) {
         if (error) {
@@ -236,20 +240,12 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         // Uncomment to send feedback via static HTML code 
         if(json.hasOwnProperty('teamId')) {
             res.send("<h1>APO Team verifcation</h1><p>The room " + json.title + " <b>IS</b> under one of your teams! Please contact Steve Greenberg. </p>");
-            request(teamFound, function (error, response, body2) {
-            if (error) debug("could not reach Cisco Spark to send message, error: " + error);
-             console.log(body2);
-            });
-        } else {
+            } else {
         res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
         // OR leverage an EJS template
         // var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
         // var compiled = ejs.compile(str)({ "rooms": json.items });
         // res.send(compiled);
-        request(teamNotFound, function (error, response, body3) {
-            if (error) debug("could not reach Cisco Spark to send message, error: " + error);
-             console.log(body3);
-            });
         };
         
         });
