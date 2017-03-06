@@ -37,10 +37,10 @@ var username;
 // Initiate the OAuth flow from the 'index.ejs' template  
 // ------------------------------------------------------------- 
 // -- Comment this section to initiate the flow from  static html page
-var initiateURL = "https://api.ciscospark.com/v1/authorize?" 
-    + "client_id=" + clientId 
+var initiateURL = "https://api.ciscospark.com/v1/authorize?"
+    + "client_id=" + clientId
     + "&response_type=code"
-    + "&redirect_uri=" + encodeURIComponent(redirectURI) 
+    + "&redirect_uri=" + encodeURIComponent(redirectURI)
     + "&scope=" + encodeURIComponent(scopes)
     + "&state=" + state;
 var read = require("fs").readFileSync;
@@ -53,7 +53,7 @@ app.get("/index.html", function (req, res) {
     res.send(compiled);
 });
 app.get("/", function (req, res) {
-     res.redirect("/index.html");
+    res.redirect("/index.html");
 });
 // -------------------------------------------------------------
 // Statically serve the "/www" directory
@@ -71,7 +71,7 @@ app.get("/oauth", function (req, res) {
 
     // Did the user decline
     if (req.query.error) {
-       if (req.query.error == "access_denied") {
+        if (req.query.error == "access_denied") {
             debug("user declined");
             res.send("<h1>OAuth Integration could not complete</h1><p>Got your NO, ciao.</p>");
             return;
@@ -134,12 +134,12 @@ app.get("/oauth", function (req, res) {
         if (response.statusCode != 200) {
             debug("access token not issued with status code: " + response.statusCode);
             switch (response.statusCode) {
-                case 401:
-                    res.send("<h1>OAuth Integration could not complete</h1><p>OAuth authentication error. Ask the service contact to check the secret.</p>");
-                    break;
-                default:
-                    res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your access token. Try again...</p>");
-                    break;
+            case 401:
+                res.send("<h1>OAuth Integration could not complete</h1><p>OAuth authentication error. Ask the service contact to check the secret.</p>");
+                break;
+            default:
+                res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your access token. Try again...</p>");
+                break;
             }
             return;
         }
@@ -178,44 +178,43 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         method: 'GET',
         url: 'https://api.ciscospark.com/v1/rooms/Y2lzY29zcGFyazovL3VzL1JPT00vNGRkZTJmYjAtNzA1Ny0xMWU0LThhZGYtNTkzNDBiNjQwYzA5',
         headers:
-        {
-            "authorization": "Bearer " + access_token
-        }
+            {
+                "authorization": "Bearer " + access_token
+            }
     };
     
     var getPeopleMe = {
         method: 'GET',
         url: 'https://api.ciscospark.com/v1/people/me',
         headers:
-        {
-            "authorization": "Bearer " + access_token
-        }
+            {
+                "authorization": "Bearer " + access_token
+            }
     };
  
-function postToSmart (found){
-  request(getPeopleMe, function (getPeopleMeError, getPeopleMeResponse, getPeopleMeBody) {
-  if (getPeopleMeError) debug("getPeopleMe error: " + getPeopleMeError);
-  var json = JSON.parse(getPeopleMeBody);
-  username = json.displayName;
-  request({method: 'POST',
-        url: 'https://api.smartsheet.com/2.0/sheets/326282123732868/rows',
-        headers: 
-            { authorization: 'Bearer 55z55od09et7gc2fgao1bfvme2',
-              'content-type': 'application/json' },
-        body: 
-            { toTop: true,
-              cells: 
-                  [ { columnId: 8636546212489092, value: username },
-                 { columnId: 4977371515250564, value: found } ] },
-             json: true}, function (SmartError, SmartResponse, SmartBody) {
-  if (SmartError) console.log("Smartshet error: " + SmartError);
+    function postToSmart(found) {
+        request(getPeopleMe, function (getPeopleMeError, getPeopleMeResponse, getPeopleMeBody) {
+            if (getPeopleMeError) debug("getPeopleMe error: " + getPeopleMeError);
+            var json = JSON.parse(getPeopleMeBody);
+            username = json.displayName;
+            request({method: 'POST',
+                     url: 'https://api.smartsheet.com/2.0/sheets/326282123732868/rows',
+                     headers:
+                     { authorization: 'Bearer 55z55od09et7gc2fgao1bfvme2',
+                      'content-type': 'application/json' },
+                     body:
+                     { toTop: true,
+                      cells:
+                      [ { columnId: 8636546212489092, value: username },
+                        { columnId: 4977371515250564, value: found } ] },
+                     json: true}, function (SmartError, SmartResponse, SmartBody) {
+                if (SmartError) console.log("Smartshet error: " + SmartError);
+                console.log(SmartBody);
+            });
 
-  console.log(SmartBody);
-});
-
-});
+        });
     
-}
+    }
     
 
 
@@ -234,7 +233,7 @@ function postToSmart (found){
             res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>" + response.statusCode);
             return;
         }
-
+/*
         // Check JSON payload is compliant with specs https://api.ciscospark.com/v1/people/me
         //    {
         //      "id": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS85MmIzZGQ5YS02NzVkLTRhNDEtOGM0MS0yYWJkZjg5ZjQ0ZjQ",
@@ -245,6 +244,7 @@ function postToSmart (found){
         //      "avatar": "https://1efa7a94ed216783e352-c62266528714497a17239ececf39e9e2.ssl.cf1.rackcdn.com/V1~c2582d2fb9d11e359e02b12c17800f09~aqSu09sCTVOOx45HJCbWHg==~1600",
         //      "created": "2016-02-04T15:46:20.321Z"
         //    }
+*/
         var json = JSON.parse(body);
         /*
         if ((!json) || (!json.displayName)) {
@@ -254,22 +254,22 @@ function postToSmart (found){
         }
         */
         // Uncomment to send feedback via static HTML code 
-        if(json.hasOwnProperty('teamId')) {
+        if (json.hasOwnProperty('teamId')) {
             res.send("<h1>APO Team verifcation</h1><p>The room " + json.title + " <b>IS</b> under one of your teams! Please contact Steve Greenberg. </p>");
             postToSmart(true);
-            });    
         } else {
             res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
              postToSmart(true);
-        });
+        } 
+        /*
         // OR leverage an EJS template
         // var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
         // var compiled = ejs.compile(str)({ "rooms": json.items });
         // res.send(compiled);
-        };
+        */
+        }
+        );
         
-        });
-    
 }
 
 
