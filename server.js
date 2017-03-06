@@ -258,7 +258,7 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
             res.send("<h1>APO Team verifcation</h1><p>The room " + json.title + " <b>IS</b> under one of your teams! Please contact Steve Greenberg. </p>");
             postToSmart(true);
         } else {
-            res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
+            res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p><p>Your result has been saved. Thank you. </p>");
              postToSmart(false);
         } 
         /*
