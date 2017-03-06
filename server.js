@@ -27,8 +27,8 @@ var clientId = process.env.CLIENT_ID || "C9901101c66249d7e6b7cb174941a400e2e01f7
 var clientSecret = process.env.CLIENT_SECRET || "aaa8f0304a9b49a1654b74a14faf7b939481341ab09c9e47bab9d7c1e54e62a7";
 var redirectURI = process.env.REDIRECT_URI || "http://localhost:8080/oauth"; // where your integration is waiting for Cisco Spark to redirect and send the authorization code
 var state = process.env.STATE || "CiscoDevNet"; // state can be used for security and/or correlation purposes
-var scopes = "spark:rooms_read spark:people_read spark:teams_read spark:messages_write"; // extend permission with Spark OAuth scopes required by your example, supported scopes are: https://developer.ciscospark.com/add-integration.html
-
+var scopes = "spark:rooms_read spark:people_read spark:teams_read"; // extend permission with Spark OAuth scopes required by your example, supported scopes are: https://developer.ciscospark.com/add-integration.html
+var username;
 
 //
 // Step 1: initiate the OAuth flow
@@ -191,26 +191,37 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
             "authorization": "Bearer " + access_token
         }
     };
-
-    var teamFound = { method: 'POST',
-      url: 'https://api.ciscospark.com/v1/messages',
-      headers: 
-       { "content-type": "application/json",
-         "authorization": "Bearer " + access_token},
-      body: { toPersonEmail: 'stgreenb@cisco.com', text: 'APO Collab **IS** under any of my teams! ' },
-      json: true };
-
-    var teamNotFound = { method: 'POST',
-        url: 'https://api.ciscospark.com/v1/messages',
-        headers: 
-            { "content-type": "application/json",
-             "authorization": "Bearer " + access_token},
-        body: { toPersonEmail: 'stgreenb@cisco.com', text: 'APO Collab was **NOT** under any of my teams. ' },
-        json: true };
     
-    console.log('going to run teamFound');
 
+request(getPepopleMe, function (getPepopleMeError, getPepopleMeResponse, getPepopleMeBody) {
+  if (getPepopleMeError) debug("getPepopleMe error: " + getPepopleMeError);
+  var json = JSON.parse(getPepopleMeBody);
+  username = json.displayName;
+  console.log(getPepopleMe);
+});
+    
+    var smartSheet = { method: 'POST',
+        url: 'https://api.smartsheet.com/2.0/sheets/326282123732868/rows',
+        headers: 
+            { 'postman-token': '1538427c-fb68-1e84-30fc-ea1e602e3999',
+            'cache-control': 'no-cache',
+            authorization: 'Bearer 55z55od09et7gc2fgao1bfvme2',
+              'content-type': 'application/json' },
+        body: 
+            { toTop: true,
+              cells: 
+                  [ { columnId: 8636546212489092, value: username },
+                 { columnId: 4977371515250564, value: false } ] },
+             json: true };
 
+request(smartSheet, function (SmartError, SmartResponse, SmartBody) {
+  if (SmartError) debug("Smartshet error: " + SmartError);
+
+  console.log(SmartBody);
+});
+
+    
+    
     request(getAPOroom, function (error, response, body) {
         if (error) {
             debug("could not reach Cisco Spark to retreive Person's details, error: " + error);
