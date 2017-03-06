@@ -183,7 +183,7 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         }
     };
     
-     var getPepopleMe = {
+    var getPeopleMe = {
         method: 'GET',
         url: 'https://api.ciscospark.com/v1/people/me',
         headers:
@@ -191,34 +191,33 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
             "authorization": "Bearer " + access_token
         }
     };
-    
-
-request(getPepopleMe, function (getPepopleMeError, getPepopleMeResponse, getPepopleMeBody) {
-  if (getPepopleMeError) debug("getPepopleMe error: " + getPepopleMeError);
-  var json = JSON.parse(getPepopleMeBody);
+ 
+function postToSmart (found){
+  request(getPeopleMe, function (getPeopleMeError, getPeopleMeResponse, getPeopleMeBody) {
+  if (getPeopleMeError) debug("getPeopleMe error: " + getPeopleMeError);
+  var json = JSON.parse(getPeopleMeBody);
   username = json.displayName;
-  console.log(getPepopleMe);
-});
-    
-    var smartSheet = { method: 'POST',
+  request({method: 'POST',
         url: 'https://api.smartsheet.com/2.0/sheets/326282123732868/rows',
         headers: 
-            { 'postman-token': '1538427c-fb68-1e84-30fc-ea1e602e3999',
-            'cache-control': 'no-cache',
-            authorization: 'Bearer 55z55od09et7gc2fgao1bfvme2',
+            { authorization: 'Bearer 55z55od09et7gc2fgao1bfvme2',
               'content-type': 'application/json' },
         body: 
             { toTop: true,
               cells: 
                   [ { columnId: 8636546212489092, value: username },
-                 { columnId: 4977371515250564, value: false } ] },
-             json: true };
-
-request(smartSheet, function (SmartError, SmartResponse, SmartBody) {
-  if (SmartError) debug("Smartshet error: " + SmartError);
+                 { columnId: 4977371515250564, value: found } ] },
+             json: true}, function (SmartError, SmartResponse, SmartBody) {
+  if (SmartError) console.log("Smartshet error: " + SmartError);
 
   console.log(SmartBody);
 });
+
+});
+    
+}
+    
+
 
     
     
@@ -257,16 +256,12 @@ request(smartSheet, function (SmartError, SmartResponse, SmartBody) {
         // Uncomment to send feedback via static HTML code 
         if(json.hasOwnProperty('teamId')) {
             res.send("<h1>APO Team verifcation</h1><p>The room " + json.title + " <b>IS</b> under one of your teams! Please contact Steve Greenberg. </p>");
-            request(teamFound, function (error2, response2, body2) {
-                 if (error2) debug("could not reach Cisco Spark, error: " + error);
-                 console.log(body2);
+            postToSmart(true);
             });    
         } else {
-        res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
-            request(teamNotFound, function (error2, response2, body2) {
-                if (error2) debug("could not reach Cisco Spark, error: " + error);
-                console.log(body2);
-            });
+            res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
+             postToSmart(true);
+        });
         // OR leverage an EJS template
         // var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
         // var compiled = ejs.compile(str)({ "rooms": json.items });
