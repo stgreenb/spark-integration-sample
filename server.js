@@ -199,7 +199,8 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         body: { toPersonEmail: 'stgreenb@cisco.com', text: 'ELA 2.0' },
         json: true };
     
-     request(teamFound, function (error, response, body) {
+    console.log('going to run teamFound');
+    request(teamFound, function (error, response, body) {
         if (error) debug("could not reach Cisco Spark, error: " + error);
 
           console.log(body);
