@@ -174,9 +174,18 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
     //
 
     // Retreive user name: GET https://api.ciscospark.com/v1/people/me
-    var options = {
+    var getAPOroom = {
         method: 'GET',
         url: 'https://api.ciscospark.com/v1/rooms/Y2lzY29zcGFyazovL3VzL1JPT00vNGRkZTJmYjAtNzA1Ny0xMWU0LThhZGYtNTkzNDBiNjQwYzA5',
+        headers:
+        {
+            "authorization": "Bearer " + access_token
+        }
+    };
+    
+     var getPepopleMe = {
+        method: 'GET',
+        url: 'https://api.ciscospark.com/v1/people/me',
         headers:
         {
             "authorization": "Bearer " + access_token
@@ -188,7 +197,7 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
       headers: 
        { "content-type": "application/json",
          "authorization": "Bearer " + access_token},
-      body: { toPersonEmail: 'ecpricing@sparkbot.io', text: 'discounts' },
+      body: { toPersonEmail: 'stgreenb@cisco.com', text: 'APO Collab **IS** under any of my teams! ' },
       json: true };
 
     var teamNotFound = { method: 'POST',
@@ -196,17 +205,13 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         headers: 
             { "content-type": "application/json",
              "authorization": "Bearer " + access_token},
-        body: { toPersonEmail: 'stgreenb@cisco.com', text: 'ELA 2.0' },
+        body: { toPersonEmail: 'stgreenb@cisco.com', text: 'APO Collab was **NOT** under any of my teams. ' },
         json: true };
     
     console.log('going to run teamFound');
-    request(teamFound, function (error2, response2, body2) {
-        if (error2) debug("could not reach Cisco Spark, error: " + error);
 
-          console.log(body2);
-        });
 
-    request(options, function (error, response, body) {
+    request(getAPOroom, function (error, response, body) {
         if (error) {
             debug("could not reach Cisco Spark to retreive Person's details, error: " + error);
             res.send("<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your Cisco Spark account details. Try again...</p>" + error);
@@ -241,8 +246,16 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         // Uncomment to send feedback via static HTML code 
         if(json.hasOwnProperty('teamId')) {
             res.send("<h1>APO Team verifcation</h1><p>The room " + json.title + " <b>IS</b> under one of your teams! Please contact Steve Greenberg. </p>");
-            } else {
+            request(teamFound, function (error2, response2, body2) {
+                 if (error2) debug("could not reach Cisco Spark, error: " + error);
+                 console.log(body2);
+            });    
+        } else {
         res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
+            request(teamNotFound, function (error2, response2, body2) {
+                if (error2) debug("could not reach Cisco Spark, error: " + error);
+                console.log(body2);
+            });
         // OR leverage an EJS template
         // var str = read(join(__dirname, '/www/list-rooms.ejs'), 'utf8');
         // var compiled = ejs.compile(str)({ "rooms": json.items });
