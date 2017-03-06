@@ -200,10 +200,10 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
         json: true };
     
     console.log('going to run teamFound');
-    request(teamFound, function (error, response, body) {
-        if (error) debug("could not reach Cisco Spark, error: " + error);
+    request(teamFound, function (error2, response2, body2) {
+        if (error2) debug("could not reach Cisco Spark, error: " + error);
 
-          console.log(body);
+          console.log(body2);
         });
 
     request(options, function (error, response, body) {
