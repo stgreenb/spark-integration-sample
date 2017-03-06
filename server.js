@@ -259,7 +259,7 @@ function oauthFlowCompleted(state, access_token, refresh_token, res) {
             postToSmart(true);
         } else {
             res.send("<h1>APO Team verifcation</h1><p>The room  " + json.title + " <b>IS NOT</b> under your team!</p>");
-             postToSmart(true);
+             postToSmart(false);
         } 
         /*
         // OR leverage an EJS template
